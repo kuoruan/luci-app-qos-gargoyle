@@ -48,11 +48,11 @@ end
 
 o.write = function(...)
 	if qos_gargoyle_enabled then
-		sys.call("/etc/init.d/qos_gargoyle stop >/dev/null")
+		sys.call("/etc/init.d/qos_gargoyle stop >/dev/null 2>&1")
 		sys.init.disable(qos_gargoyle)
 	else
 		sys.init.enable(qos_gargoyle)
-		sys.call("/etc/init.d/qos_gargoyle restart >/dev/null")
+		sys.call("/etc/init.d/qos_gargoyle restart >/dev/null 2>&1")
 	end
 
 	qos_gargoyle_enabled = sys.init.enabled(qos_gargoyle)
