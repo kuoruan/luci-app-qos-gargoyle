@@ -4,12 +4,15 @@ Based on GuoGuo's luci-app-qos-guoguo
 Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
 ]]--
 
-local uci = require "luci.model.uci".cursor()
-local dsp = require "luci.dispatcher"
+local uci  = require "luci.model.uci".cursor()
+local dsp  = require "luci.dispatcher"
+local http = require "luci.http"
 
 local m, s, o
 local download_classes = {}
-local qos_gargoyle = "qos_gargoyle"
+local qos_gargoyle     = "qos_gargoyle"
+local class_url        = dsp.build_url("admin/network/qos_gargoyle/download/class/%s")
+local rule_url         = dsp.build_url("admin/network/qos_gargoyle/download/rule/%s")
 
 uci:foreach(qos_gargoyle, "download_class", function(s)
 	local class_alias = s.name
@@ -38,11 +41,11 @@ s = m:section(TypedSection, "download_class", translate("Service Classes"),
 s.anonymous = true
 s.addremove = true
 s.template  = "cbi/tblsection"
-s.extedit   = dsp.build_url("admin/network/qos_gargoyle/download/class/%s")
+s.extedit   = class_url
 s.create    = function(...)
 	local sid = TypedSection.create(...)
 	if sid then
-		luci.http.redirect(s.extedit % sid)
+		http.redirect(class_url % sid)
 		return
 	end
 end
@@ -85,11 +88,11 @@ s.addremove = true
 s.sortable  = true
 s.anonymous = true
 s.template  = "cbi/tblsection"
-s.extedit   = dsp.build_url("admin/network/qos_gargoyle/download/rule/%s")
+s.extedit   = rule_url
 s.create    = function(...)
 	local sid = TypedSection.create(...)
 	if sid then
-		luci.http.redirect(s.extedit % sid)
+		http.redirect(rule_url % sid)
 		return
 	end
 end
