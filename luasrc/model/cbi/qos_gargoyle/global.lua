@@ -46,16 +46,16 @@ o.render = function(self, section, scope)
 	Button.render(self, section, scope)
 end
 
-o.write = function(self, section, value)
+o.write = function(...)
 	if qos_gargoyle_enabled then
-		qos_gargoyle_enabled = false
 		sys.call("/etc/init.d/qos_gargoyle stop >/dev/null")
 		sys.init.disable(qos_gargoyle)
 	else
-		qos_gargoyle_enabled = true
-		sys.call("/etc/init.d/qos_gargoyle restart >/dev/null")
 		sys.init.enable(qos_gargoyle)
+		sys.call("/etc/init.d/qos_gargoyle restart >/dev/null")
 	end
+
+	qos_gargoyle_enabled = sys.init.enabled(qos_gargoyle)
 end
 
 s = m:section(TypedSection, "upload", translate("Upload Settings"))
@@ -65,7 +65,6 @@ o = s:option(ListValue, "default_class", translate("Default Service Class"),
 	translate("Specifie how packets that do not match any rule should be classified."))
 o:value("", translate("None"))
 for _, s in ipairs(upload_classes) do o:value(s.name, s.alias) end
-o.rmempty = true
 
 o = s:option(Value, "total_bandwidth", translate("Total Upload Bandwidth"),
 	translate("Should be set to around 98% of your available upload bandwidth. Entering a number "
@@ -83,7 +82,6 @@ o = s:option(ListValue, "default_class", translate("Default Service Class"),
 	translate("Specifie how packets that do not match any rule should be classified."))
 o:value("", translate("None"))
 for _, s in ipairs(download_classes) do o:value(s.name, s.alias) end
-o.rmempty = true
 
 o = s:option(Value, "total_bandwidth", translate("Total Download Bandwidth"),
 	translate("Specifying correctly is crucial to making QoS work. Note that bandwidth is specified "
