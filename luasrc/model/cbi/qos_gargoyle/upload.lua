@@ -34,6 +34,7 @@ local function get_addr(ip, port)
 end
 
 m = Map(qos_gargoyle, translate("Upload Settings"))
+m:append(Template("qos_gargoyle/rules_list"))
 
 s = m:section(TypedSection, "upload_class", translate("Service Classes"),
 	translate("Each upload service class is specified by three parameters: percent bandwidth at "
