@@ -31,15 +31,6 @@ msgstr ""
 msgid "All"
 msgstr "全部"
 
-msgid "All Address"
-msgstr "任意地址"
-
-msgid "All IPs"
-msgstr "任意 IP"
-
-msgid "All Ports"
-msgstr "任意端口"
-
 msgid "Class Name"
 msgstr "类型名称"
 
@@ -52,10 +43,7 @@ msgstr "连接流量达到"
 msgid "Default Service Class"
 msgstr "默认服务类型"
 
-msgid "Destination Address"
-msgstr "目标地址"
-
-msgid "Destination IP"
+msgid "Destination IP(s)"
 msgstr "目标 IP"
 
 msgid "Destination Port(s)"
@@ -219,10 +207,7 @@ msgstr ""
 "要的上传速度限制。你应当在 QoS 关闭的情况下使用测速程序以确定可用的上传带宽。带宽以 kbps 为单位。"
 "（1KByte/s=8Kbps）"
 
-msgid "Source Address"
-msgstr "源地址"
-
-msgid "Source IP"
+msgid "Source IP(s)"
 msgstr "源 IP"
 
 msgid "Source Port(s)"

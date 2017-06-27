@@ -19,7 +19,7 @@ uci:foreach(qos_gargoyle, "upload_class", function(s)
 end)
 
 local function has_ndpi()
-	return luci.sys.exec("lsmod | awk '{print $1}' | grep -q 'xt_ndpi'") == 0
+	return luci.sys.call("lsmod | cut -d' ' -f1 | grep -q 'xt_ndpi'") == 0
 end
 
 m = Map(qos_gargoyle, translate("Edit Upload Classification Rule"))
@@ -47,28 +47,28 @@ o.write = function(self, section, value)
 	Value.write(self, section, value:lower())
 end
 
-o = s:option(Value, "source", translate("Source IP"),
+o = s:option(Value, "source", translate("Source IP(s)"),
 	translate("Packet's source ip, can optionally have /[mask] after it (see -s option in iptables "
 	.. "man page)."))
-o:value("", translate("All IPs"))
+o:value("", translate("All"))
 wa.cbi_add_knownips(o)
 o.datatype = "ipmask4"
 
 o = s:option(Value, "srcport", translate("Source Port(s)"),
 	translate("Packet's source port, can be a range (eg. 80-90)."))
-o:value("", translate("All Ports"))
+o:value("", translate("All"))
 o.datatype  = "or(port, portrange)"
 
-o = s:option(Value, "destination", translate("Destination IP"),
+o = s:option(Value, "destination", translate("Destination IP(s)"),
 	translate("Packet's destination ip, can optionally have /[mask] after it (see -d option in "
 	.. "iptables man page)."))
-o:value("", translate("All IPs"))
+o:value("", translate("All"))
 wa.cbi_add_knownips(o)
 o.datatype = "ipmask4"
 
 o = s:option(Value, "dstport", translate("Destination Port(s)"),
 	translate("Packet's destination port, can be a range (eg. 80-90)."))
-o:value("", translate("All Ports"))
+o:value("", translate("All"))
 o.datatype  = "or(port, portrange)"
 
 o = s:option(Value, "min_pkt_size", translate("Minimum Packet Length"),

@@ -4,6 +4,7 @@ Based on GuoGuo's luci-app-qos-guoguo
 Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
 ]]--
 
+local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
 local dsp  = require "luci.dispatcher"
 local http = require "luci.http"
@@ -20,18 +21,6 @@ uci:foreach(qos_gargoyle, "download_class", function(s)
 		download_classes[#download_classes + 1] = {name = s[".name"], alias = class_alias}
 	end
 end)
-
-local function get_addr(ip, port)
-	if ip and port then
-		return "%s: %s<br>%s: %s" % {translate("IP(s)"), ip, translate("Port(s)"), port}
-	elseif ip then
-		return ip
-	elseif port then
-		return "%s<br>%s: %s" % {translate("All IPs"), translate("Port(s)"), port}
-	else
-		return translate("All Address")
-	end
-end
 
 m = Map(qos_gargoyle, translate("Download Settings"))
 m:append(Template("qos_gargoyle/rules_list"))
@@ -108,25 +97,31 @@ o:value("udp", "UDP")
 o:value("icmp", "ICMP")
 o:value("gre", "GRE")
 o.size = "10"
+o.cfgvalue = function(...)
+	local v = Value.cfgvalue(...)
+	return v and v:upper() or ""
+end
 o.write = function(self, section, value)
 	Value.write(self, section, value:lower())
 end
 
-o = s:option(DummyValue, "_srcaddr", translate("Source Address"))
-o.rawhtml  = true
-o.cfgvalue = function(self, section)
-	local source_ip = self.map:get(section, "source")
-	local source_port = self.map:get(section, "srcport")
-	return get_addr(source_ip, source_port)
-end
+o = s:option(Value, "source", translate("Source IP(s)"))
+o:value("", translate("All"))
+wa.cbi_add_knownips(o)
+o.datatype = "ipmask4"
 
-o = s:option(DummyValue, "_desaddr", translate("Destination Address"))
-o.rawhtml  = true
-o.cfgvalue = function(self, section)
-	local destination_ip = self.map:get(section, "destination")
-	local destination_port = self.map:get(section, "dstport")
-	return get_addr(destination_ip, destination_port)
-end
+o = s:option(Value, "srcport", translate("Source Port(s)"))
+o:value("", translate("All"))
+o.datatype  = "or(port, portrange)"
+
+o = s:option(Value, "destination", translate("Destination IP(s)"))
+o:value("", translate("All"))
+wa.cbi_add_knownips(o)
+o.datatype = "ipmask4"
+
+o = s:option(Value, "dstport", translate("Destination Port(s)"))
+o:value("", translate("All"))
+o.datatype  = "or(port, portrange)"
 
 o = s:option(DummyValue, "min_pkt_size", translate("Minimum Packet Length"))
 o.cfgvalue = function(...)
