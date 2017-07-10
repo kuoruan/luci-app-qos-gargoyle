@@ -20,10 +20,6 @@ uci:foreach(qos_gargoyle, "download_class", function(s)
 	end
 end)
 
-local function has_ndpi()
-	return sys.call("modprobe xt_ndpi >/dev/null") == 0
-end
-
 m = Map(qos_gargoyle, translate("Edit Download Classification Rule"))
 m.redirect = luci.dispatcher.build_url("admin/network/qos_gargoyle/download")
 
