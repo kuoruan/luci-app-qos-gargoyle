@@ -3,8 +3,10 @@ luci for Gargoyle QoS
 Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
 ]]--
 
-local wa  = require "luci.tools.webadmin"
-local uci = require "luci.model.uci".cursor()
+local wa   = require "luci.tools.webadmin"
+local uci  = require "luci.model.uci".cursor()
+local sys  = require "luci.sys"
+local util = require "luci.util"
 
 local m, s, o
 local sid = arg[1]
@@ -19,7 +21,7 @@ uci:foreach(qos_gargoyle, "download_class", function(s)
 end)
 
 local function has_ndpi()
-	return luci.sys.call("lsmod | cut -d' ' -f1 | grep -q 'xt_ndpi'") == 0
+	return sys.call("modprobe xt_ndpi >/dev/null") == 0
 end
 
 m = Map(qos_gargoyle, translate("Edit Download Classification Rule"))
@@ -47,7 +49,7 @@ o.write = function(self, section, value)
 	Value.write(self, section, value:lower())
 end
 
-o = s:option(Value, "source", translate("Source IP"),
+o = s:option(Value, "source", translate("Source IP(s)"),
 	translate("Packet's source ip, can optionally have /[mask] after it (see -s option in iptables "
 	.. "man page)."))
 o:value("", translate("All"))
@@ -59,7 +61,7 @@ o = s:option(Value, "srcport", translate("Source Port(s)"),
 o:value("", translate("All"))
 o.datatype  = "or(port, portrange)"
 
-o = s:option(Value, "destination", translate("Destination IP"),
+o = s:option(Value, "destination", translate("Destination IP(s)"),
 	translate("Packet's destination ip, can optionally have /[mask] after it (see -d option in "
 	.. "iptables man page)."))
 o:value("", translate("All"))
@@ -85,23 +87,14 @@ o.datatype = "uinteger"
 
 if has_ndpi() then
 	o = s:option(ListValue, "ndpi", translate("DPI Protocol"))
-	local pats = io.popen("iptables -m ndpi --help | grep -e '^--'")
-	if pats then
-		local l, s, e, prt_v, prt_d
-		while true do
-			l = pats:read("*l")
-			if not l then break end
-			s, e = l:find("%-%-[^%s]+")
-			if s and e then
-				prt_v = l:sub(s + 2, e)
-			end
-			s, e = l:find("for [^%s]+ protocol")
-			if s and e then
-				prt_d = l:sub(s + 3, e - 9)
-			end
-			o:value(prt_v, prt_d)
+	local lines = sys.exec("iptables -m ndpi --help | grep '^--'")
+	for _, line in util.vspairs(util.split(lines)) do
+		if line ~= "" then
+			local _, _, v, n = line:find("%-%-([^%s]+) Match for ([^%s]+)")
+			o:value(v, n)
+		else
+			o:value("", translate("All"))
 		end
-		pats:close()
 	end
 end
 

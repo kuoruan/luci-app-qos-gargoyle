@@ -35,7 +35,7 @@ s = m:section(TypedSection, "global", translate("Global Settings"))
 s.anonymous = true
 
 o = s:option(Button, "_switch", nil, translate("QoS Switch"))
-o.render = function(self, section, scope)
+o.render = function(...)
 	if qos_gargoyle_enabled then
 		self.title = translate("Disable QoS")
 		self.inputstyle = "reset"
@@ -43,9 +43,8 @@ o.render = function(self, section, scope)
 		self.title = translate("Enable QoS")
 		self.inputstyle = "apply"
 	end
-	Button.render(self, section, scope)
+	Button.render(...)
 end
-
 o.write = function(...)
 	if qos_gargoyle_enabled then
 		sys.call("/etc/init.d/qos_gargoyle stop >/dev/null 2>&1")
