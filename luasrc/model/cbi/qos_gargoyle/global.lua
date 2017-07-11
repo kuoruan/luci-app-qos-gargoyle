@@ -62,7 +62,6 @@ s.anonymous = true
 
 o = s:option(ListValue, "default_class", translate("Default Service Class"),
 	translate("Specifie how packets that do not match any rule should be classified."))
-o:value("", translate("None"))
 for _, s in ipairs(upload_classes) do o:value(s.name, s.alias) end
 
 o = s:option(Value, "total_bandwidth", translate("Total Upload Bandwidth"),
@@ -79,7 +78,6 @@ s.anonymous = true
 
 o = s:option(ListValue, "default_class", translate("Default Service Class"),
 	translate("Specifie how packets that do not match any rule should be classified."))
-o:value("", translate("None"))
 for _, s in ipairs(download_classes) do o:value(s.name, s.alias) end
 
 o = s:option(Value, "total_bandwidth", translate("Total Download Bandwidth"),
