@@ -8,6 +8,7 @@ local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
 local dsp  = require "luci.dispatcher"
 local http = require "luci.http"
+local ctl  = require "luci.controller.qos_gargoyle"
 
 local m, s, o
 local upload_classes = {}

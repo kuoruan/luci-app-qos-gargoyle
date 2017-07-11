@@ -7,6 +7,7 @@ local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
 local sys  = require "luci.sys"
 local util = require "luci.util"
+local ctl  = require "luci.controller.qos_gargoyle"
 
 local m, s, o
 local sid = arg[1]
@@ -81,7 +82,7 @@ o = s:option(Value, "connbytes_kb", translate("Connection Bytes Reach"),
 	translate("The total size of data transmitted since the establishment of the link (in Kbytes)."))
 o.datatype = "uinteger"
 
-if has_ndpi() then
+if ctl.has_ndpi() then
 	o = s:option(ListValue, "ndpi", translate("DPI Protocol"))
 	local lines = sys.exec("iptables -m ndpi --help | grep '^--'")
 	for _, line in util.vspairs(util.split(lines)) do

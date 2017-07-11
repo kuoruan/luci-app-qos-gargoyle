@@ -38,5 +38,6 @@ function index()
 end
 
 function has_ndpi()
-	return luci.sys.call("lsmod | cut -d ' ' -f1 | grep -q xt_ndpi") == 0
+	local sys = require "luci.sys"
+	return sys.call("lsmod | cut -d ' ' -f1 | grep -q xt_ndpi") == 0
 end
