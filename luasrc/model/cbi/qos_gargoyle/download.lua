@@ -140,4 +140,12 @@ o.cfgvalue = function(...)
 	return v and v .. " KB" or translate("Not set")
 end
 
+if ctl.has_ndpi() then
+	o = rule_s:option(DummyValue, "ndpi", translate("DPI Protocol"))
+	o.cfgvalue = function(...)
+		local v = Value.cfgvalue(...)
+		return v and v:upper() or translate("All")
+	end
+end
+
 return m

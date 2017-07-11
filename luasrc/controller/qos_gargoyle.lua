@@ -6,6 +6,9 @@ Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
 
 module("luci.controller.qos_gargoyle", package.seeall)
 
+local sys  = require "luci.sys"
+local util = require "luci.util"
+
 function index()
 	if not nixio.fs.access("/etc/config/qos_gargoyle") then
 		return
@@ -38,6 +41,15 @@ function index()
 end
 
 function has_ndpi()
-	local sys = require "luci.sys"
 	return sys.call("lsmod | cut -d ' ' -f1 | grep -q xt_ndpi") == 0
+end
+
+function cbi_add_dpi_protocols(field)
+	local lines = sys.exec("iptables -m ndpi --help | grep '^--'")
+	for _, line in util.vspairs(util.split(util.trim(lines), "\n")) do
+		local _, _, v, n = line:find("%-%-([^%s]+) Match for ([^%s]+)")
+		if v and n then
+			field:value(v, n)
+		end
+	end
 end

@@ -10,7 +10,7 @@ local dsp  = require "luci.dispatcher"
 local http = require "luci.http"
 local ctl  = require "luci.controller.qos_gargoyle"
 
-local m, s, o
+local m, class_s, rule_s, o
 local upload_classes = {}
 local qos_gargoyle   = "qos_gargoyle"
 
@@ -132,6 +132,14 @@ o = rule_s:option(DummyValue, "connbytes_kb", translate("Connection Bytes Reach"
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
 	return v and v .. " KB" or translate("Not set")
+end
+
+if ctl.has_ndpi() then
+	o = rule_s:option(DummyValue, "ndpi", translate("DPI Protocol"))
+	o.cfgvalue = function(...)
+		local v = Value.cfgvalue(...)
+		return v and v:upper() or translate("All")
+	end
 end
 
 return m

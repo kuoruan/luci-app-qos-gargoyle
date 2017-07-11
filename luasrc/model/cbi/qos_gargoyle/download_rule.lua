@@ -5,8 +5,6 @@ Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
 
 local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
-local sys  = require "luci.sys"
-local util = require "luci.util"
 local ctl  = require "luci.controller.qos_gargoyle"
 
 local m, s, o
@@ -84,15 +82,8 @@ o.datatype = "uinteger"
 
 if ctl.has_ndpi() then
 	o = s:option(ListValue, "ndpi", translate("DPI Protocol"))
-	local lines = sys.exec("iptables -m ndpi --help | grep '^--'")
-	for _, line in util.vspairs(util.split(lines)) do
-		if line ~= "" then
-			local _, _, v, n = line:find("%-%-([^%s]+) Match for ([^%s]+)")
-			o:value(v, n)
-		else
-			o:value("", translate("All"))
-		end
-	end
+	o:value("", translate("All"))
+	ctl.cbi_add_dpi_protocols(o)
 end
 
 return m
