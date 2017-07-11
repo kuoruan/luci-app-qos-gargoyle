@@ -34,6 +34,7 @@ class_s.extedit   = dsp.build_url("admin/network/qos_gargoyle/upload/class/%s")
 class_s.create    = function(...)
 	local sid = TypedSection.create(...)
 	if sid then
+		m.uci:save(qos_gargoyle)
 		http.redirect(class_s.extedit % sid)
 		return
 	end
@@ -75,6 +76,7 @@ rule_s.extedit   = dsp.build_url("admin/network/qos_gargoyle/upload/rule/%s")
 rule_s.create    = function(...)
 	local sid = TypedSection.create(...)
 	if sid then
+		m.uci:save(qos_gargoyle)
 		http.redirect(rule_s.extedit % sid)
 		return
 	end
