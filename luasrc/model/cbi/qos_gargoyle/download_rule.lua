@@ -70,15 +70,15 @@ o.datatype  = "or(port, portrange)"
 
 o = s:option(Value, "min_pkt_size", translate("Minimum Packet Length"),
 	translate("Packet's minimum size (in bytes)."))
-o.datatype = "and(uinteger, min(1))"
+o.datatype = "range(1, 1500)"
 
 o = s:option(Value, "max_pkt_size", translate("Maximum Packet Length"),
 	translate("Packet's maximum size (in bytes)."))
-o.datatype = "and(uinteger, min(1))"
+o.datatype = "range(1, 1500)"
 
 o = s:option(Value, "connbytes_kb", translate("Connection Bytes Reach"),
 	translate("The total size of data transmitted since the establishment of the link (in Kbytes)."))
-o.datatype = "uinteger"
+o.datatype = "range(0, 4194303)"
 
 if ctl.has_ndpi() then
 	o = s:option(ListValue, "ndpi", translate("DPI Protocol"))

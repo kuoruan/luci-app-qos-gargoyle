@@ -48,19 +48,19 @@ end
 o = class_s:option(DummyValue, "percent_bandwidth", translate("Percent Bandwidth At Capacity"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. "%" or translate("Not set")
+	return v and string.format("%s %%", v) or translate("Not set")
 end
 
 o = class_s:option(DummyValue, "min_bandwidth", translate("Minimum Bandwidth"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. " kbit/s" or translate("None")
+	return v and string.format("%s kbit/s", v) or translate("None")
 end
 
 o = class_s:option(DummyValue, "max_bandwidth", translate("Maximum Bandwidth"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. " kbit/s" or translate("Unlimited")
+	return v and string.format("%s kbit/s", v) or translate("Unlimited")
 end
 
 rule_s = m:section(TypedSection, "upload_rule",translate("Classification Rules"),
@@ -121,19 +121,19 @@ o.datatype  = "or(port, portrange)"
 o = rule_s:option(DummyValue, "min_pkt_size", translate("Minimum Packet Length"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. " B" or translate("Not set")
+	return v and wa.byte_format(tonumber(v)) or translate("Not set")
 end
 
 o = rule_s:option(DummyValue, "max_pkt_size", translate("Maximum Packet Length"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. " B" or translate("Not set")
+	return v and wa.byte_format(tonumber(v)) or translate("Not set")
 end
 
 o = rule_s:option(DummyValue, "connbytes_kb", translate("Connection Bytes Reach"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and v .. " KB" or translate("Not set")
+	return v and wa.byte_format(tonumber(v) * 1024) or translate("Not set")
 end
 
 if ctl.has_ndpi() then

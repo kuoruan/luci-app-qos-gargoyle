@@ -120,6 +120,6 @@ o = s:option(Value, "pinglimit", translate("Manual Ping Limit"),
 	.. "target ping time of the active mode. The time you enter becomes the increase in the target "
 	.. "ping time between minRTT and active mode. Leave empty to use the default settings."))
 o:depends("qos_monenabled", "true")
-o.datatype = "range(100, 2000)"
+o.datatype = "range(10, 250)"
 
 return m

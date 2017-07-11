@@ -41,7 +41,7 @@ o = s:option(Value, "min_bandwidth", translate("Minimum Bandwidth"),
 	.. "of all classes first before allocating to other waiting classes so be careful to use minimum "
 	.. "bandwidths sparingly."))
 o:value("", translate("None"))
-o.datatype = "and(uinteger, min(1))"
+o.datatype = "uinteger"
 o.rmempty  = true
 
 o = s:option(Value, "max_bandwidth", translate("Maximum Bandwidth"),
@@ -49,7 +49,7 @@ o = s:option(Value, "max_bandwidth", translate("Maximum Bandwidth"),
 	.. "bandwidth is available, this service class will never be permitted to use more than this "
 	.. "amount of bandwidth."))
 o:value("", translate("Unlimited"))
-o.datatype = "and(uinteger, min(1))"
+o.datatype = "uinteger"
 o.rmempty  = true
 
 o = s:option(ListValue, "minRTT", translate("Minimize RTT"),
