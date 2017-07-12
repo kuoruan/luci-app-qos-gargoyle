@@ -52,14 +52,13 @@ o:value("", translate("Unlimited"))
 o.datatype = "uinteger"
 o.rmempty  = true
 
-o = s:option(ListValue, "minRTT", translate("Minimize RTT"),
+o = s:option(Flag, "minRTT", translate("Minimize RTT"),
 	translate("Indicates to the active congestion controller that you wish to minimize round trip "
 	.. "times (RTT) when this class is active. Use this setting for online gaming or VoIP "
 	.. "applications that need low round trip times (ping times). Minimizing RTT comes at the expense "
 	.. "of efficient WAN throughput so while these class are active your WAN throughput will decline "
 	.. "(usually around 20%)."))
-o:value("Yes", translate("Yes"))
-o:value("No", translate("No"))
-o.default = "No"
+o.enabled  = "Yes"
+o.disabled = "No"
 
 return m

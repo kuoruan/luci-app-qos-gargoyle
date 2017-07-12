@@ -47,11 +47,11 @@ o.render = function(self, section, scope)
 end
 o.write = function(...)
 	if qos_gargoyle_enabled then
-		sys.call("/etc/init.d/qos_gargoyle stop >/dev/null 2>&1")
+		sys.init.stop(qos_gargoyle)
 		sys.init.disable(qos_gargoyle)
 	else
 		sys.init.enable(qos_gargoyle)
-		sys.call("/etc/init.d/qos_gargoyle restart >/dev/null 2>&1")
+		sys.init.start(qos_gargoyle)
 	end
 
 	qos_gargoyle_enabled = sys.init.enabled(qos_gargoyle)
@@ -86,7 +86,7 @@ o = s:option(Value, "total_bandwidth", translate("Total Download Bandwidth"),
 o.datatype = "uinteger"
 o.rmempty  = false
 
-o = s:option(ListValue, "qos_monenabled", translate("Enable Active Congestion Control"),
+o = s:option(Flag, "qos_monenabled", translate("Enable Active Congestion Control"),
 	translate("<p>The active congestion control (ACC) observes your download activity and "
 	.. "automatically adjusts your download link limit to maintain proper QoS performance. ACC "
 	.. "automatically compensates for changes in your ISP's download speed and the demand from your "
@@ -96,9 +96,8 @@ o = s:option(ListValue, "qos_monenabled", translate("Enable Active Congestion Co
 	translate("<p>While ACC does not adjust your upload link speed you must enable and properly "
 	.. "configure your upload QoS for it to function properly.</p>")
 	)
-o:value("true", translate("Enable"))
-o:value("false", translate("Disable"))
-o.default  = "false"
+o.enabled  = "true"
+o.disabled = "false"
 
 o = s:option(Value, "ptarget_ip", translate("Use Non-standard Ping Target"),
 	translate("The segment of network between your router and the ping target is where congestion is "
