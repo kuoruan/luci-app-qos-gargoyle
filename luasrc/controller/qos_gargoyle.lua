@@ -1,8 +1,5 @@
---[[
-luci for Gargoyle QoS
-Based on GuoGuo's luci-app-qos-guoguo
-Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
-]]--
+-- Copyright 2017 Xingwang Liao <kuoruan@gmail.com>
+-- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.qos_gargoyle", package.seeall)
 

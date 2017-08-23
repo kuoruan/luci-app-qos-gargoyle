@@ -1,7 +1,5 @@
---[[
-luci for Gargoyle QoS
-Copyright (c) 2017 Xingwang Liao <kuoruan@gmail.com>
-]]--
+-- Copyright 2017 Xingwang Liao <kuoruan@gmail.com>
+-- Licensed to the public under the Apache License 2.0.
 
 local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
