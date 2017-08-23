@@ -3,17 +3,24 @@
  Licensed to the public under the Apache License 2.0.
 -%>
 
-<%+header%>
+<% css = [[
 
-<style type="text/css">
-#troubleshoot_text {
-	padding: 20px;
-	text-align: left;
-}
-.description {
-	background-color: #33CCFF;
-}
-</style>
+	#troubleshoot_text {
+		padding: 20px;
+		text-align: left;
+	}
+	#troubleshoot_text pre {
+		word-break: break-all;
+		margin: 0;
+	}
+	.description {
+		background-color: #33CCFF;
+	}
+
+]]
+-%>
+
+<%+header%>
 
 <script type="text/javascript" src="<%=resource%>/cbi.js"></script>
 <script type="text/javascript">//<![CDATA[
