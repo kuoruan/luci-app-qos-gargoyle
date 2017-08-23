@@ -8,7 +8,10 @@ local m, s, o
 local upload_classes = {}
 local download_classes = {}
 local qos_gargoyle = "qos_gargoyle"
-local qos_gargoyle_enabled = sys.init.enabled(qos_gargoyle)
+
+local function qos_enabled()
+	return sys.init.enabled(qos_gargoyle)
+end
 
 uci:foreach(qos_gargoyle, "upload_class", function(s)
 	local class_alias = s.name
@@ -33,7 +36,7 @@ s.anonymous = true
 
 o = s:option(Button, "_switch", nil, translate("QoS Switch"))
 o.render = function(self, section, scope)
-	if qos_gargoyle_enabled then
+	if qos_enabled() then
 		self.title = translate("Disable QoS")
 		self.inputstyle = "reset"
 	else
@@ -43,15 +46,13 @@ o.render = function(self, section, scope)
 	Button.render(self, section, scope)
 end
 o.write = function(...)
-	if qos_gargoyle_enabled then
+	if qos_enabled() then
 		sys.init.stop(qos_gargoyle)
 		sys.init.disable(qos_gargoyle)
 	else
 		sys.init.enable(qos_gargoyle)
 		sys.init.start(qos_gargoyle)
 	end
-
-	qos_gargoyle_enabled = sys.init.enabled(qos_gargoyle)
 end
 
 s = m:section(TypedSection, "upload", translate("Upload Settings"))
