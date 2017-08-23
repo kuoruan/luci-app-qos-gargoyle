@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-qos-gargoyle
-PKG_VERSION:=1.3.0
+PKG_VERSION:=1.3.1
 PKG_RELEASE:=1
 
 PKG_LICENSE:=Apache-2.0
@@ -18,6 +18,8 @@ LUCI_TITLE:=LuCI Support for Gargoyle QoS
 LUCI_DEPENDS:=+qos-gargoyle
 LUCI_PKGARCH:=all
 
+include ../../luci.mk
+
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
 help
@@ -26,7 +28,5 @@ help
 	Version: $(PKG_VERSION)-$(PKG_RELEASE)
 	$(PKG_MAINTAINER)
 endef
-
-include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

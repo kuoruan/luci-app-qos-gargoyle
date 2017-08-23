@@ -17,8 +17,7 @@ function index()
 	end
 
 	entry({"admin", "network", "qos_gargoyle"},
-		alias("admin", "network", "qos_gargoyle", "global"),
-		_("Gargoyle QoS"), 60)
+		firstchild(), _("Gargoyle QoS"), 60)
 
 	entry({"admin", "network", "qos_gargoyle", "global"},
 		cbi("qos_gargoyle/global"), _("Global Settings"), 10)
@@ -44,12 +43,12 @@ function index()
 	entry({"admin", "network", "qos_gargoyle", "troubleshooting"},
 		template("qos_gargoyle/troubleshooting"), _("Troubleshooting"), 40)
 
-	entry({"admin", "network", "qos_gargoyle", "troubleshooting_data"},
-		call("troubleshooting_data"))
+	entry({"admin", "network", "qos_gargoyle", "troubleshooting", "data"},
+		call("action_troubleshooting_data"))
 end
 
 function has_ndpi()
-	return sys.call("lsmod | cut -d ' ' -f1 | grep -q xt_ndpi") == 0
+	return sys.call("lsmod | cut -d ' ' -f1 | grep -q 'xt_ndpi'") == 0
 end
 
 function cbi_add_dpi_protocols(field)
@@ -62,7 +61,7 @@ function cbi_add_dpi_protocols(field)
 	end
 end
 
-function troubleshooting_data()
+function action_troubleshooting_data()
 	local data = {}
 
 	local show_data = util.trim(sys.exec("/etc/init.d/qos_gargoyle show 2>/dev/null"))
