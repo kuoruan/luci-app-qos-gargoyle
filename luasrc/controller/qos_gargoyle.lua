@@ -8,6 +8,8 @@ local sys  = require "luci.sys"
 local util = require "luci.util"
 local http = require "luci.http"
 
+local dpi_protocols = {}
+
 function index()
 	if not nixio.fs.access("/etc/config/qos_gargoyle") then
 		return
@@ -48,20 +50,28 @@ function has_ndpi()
 	return sys.call("lsmod | cut -d ' ' -f1 | grep -q 'xt_ndpi'") == 0
 end
 
-function cbi_add_dpi_protocols(field)
-	local lines = sys.exec("iptables -m ndpi --help | grep '^--'")
-	for _, line in util.vspairs(util.split(util.trim(lines), "\n")) do
-		local _, _, v, n = line:find("%-%-([^%s]+) Match for ([^%s]+)")
-		if v and n then
-			field:value(v, n)
+local function init_dpi_protocols()
+	for line in util.execi("iptables -m ndpi --help 2>/dev/null | grep '^--'") do
+		local _, _, protocol, name = line:find("%-%-([^%s]+) Match for ([^%s]+)")
+
+		if protocol and name then
+			dpi_protocols[protocol] = name
 		end
+	end
+end
+
+function cbi_add_dpi_protocols(field)
+	if #dpi_protocols == 0 then init_dpi_protocols() end
+
+	for p, n in util.kspairs(dpi_protocols) do
+		field:value(p, n)
 	end
 end
 
 function action_troubleshooting_data()
 	local data = {}
 
-	local show_data = util.trim(sys.exec("/etc/init.d/qos_gargoyle show 2>/dev/null"))
+	local show_data = util.trim(util.exec("/etc/init.d/qos_gargoyle show 2>/dev/null"))
 	if show_data == "" then
 		show_data = "No data found"
 	end
@@ -72,7 +82,7 @@ function action_troubleshooting_data()
 
 	local mon_data
 	if monenabled == "true" then
-		mon_data = util.trim(sys.exec("cat /tmp/qosmon.status 2>/dev/null"))
+		mon_data = util.trim(util.exec("cat /tmp/qosmon.status 2>/dev/null"))
 
 		if mon_data == "" then
 			mon_data = "No data found"
