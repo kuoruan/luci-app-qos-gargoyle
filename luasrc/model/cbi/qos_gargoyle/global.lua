@@ -31,7 +31,7 @@ m = Map(qos_gargoyle, translate("Gargoyle QoS"),
 	translate("Quality of Service (QoS) provides a way to control how available bandwidth is "
 	.. "allocated."))
 
-s = m:section(TypedSection, "global", translate("Global Settings"))
+s = m:section(NamedSection, "global", "global", translate("Global Settings"))
 s.anonymous = true
 
 o = s:option(Button, "_switch", nil, translate("QoS Switch"))
@@ -55,7 +55,11 @@ o.write = function(...)
 	end
 end
 
-s = m:section(TypedSection, "upload", translate("Upload Settings"))
+o = s:option(Value, "mtu", translate("MTU"))
+o.datatype = "range(68,9200)"
+o.placeholder = 1500
+
+s = m:section(NamedSection, "upload", "upload", translate("Upload Settings"))
 s.anonymous = true
 
 o = s:option(ListValue, "default_class", translate("Default Service Class"),
@@ -71,7 +75,7 @@ o = s:option(Value, "total_bandwidth", translate("Total Upload Bandwidth"),
 o.datatype = "uinteger"
 o.rmempty  = false
 
-s = m:section(TypedSection, "download", translate("Download Settings"))
+s = m:section(NamedSection, "download", "download", translate("Download Settings"))
 s.anonymous = true
 
 o = s:option(ListValue, "default_class", translate("Default Service Class"),

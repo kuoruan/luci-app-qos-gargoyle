@@ -1,5 +1,5 @@
 msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8\n"
+msgstr "Content-Type: text/plain; charset=UTF-8"
 
 msgid ""
 "<p>The active congestion control (ACC) observes your download activity and "
@@ -97,6 +97,9 @@ msgid ""
 msgstr ""
 
 msgid "Loading"
+msgstr ""
+
+msgid "MTU"
 msgstr ""
 
 msgid "Manual Ping Limit"
