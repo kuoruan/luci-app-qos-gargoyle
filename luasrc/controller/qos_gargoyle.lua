@@ -78,7 +78,7 @@ function action_troubleshooting_data()
 
 	data.show = show_data
 
-	local monenabled = uci:get_first("qos_gargoyle", "download", "qos_monenabled")
+	local monenabled = uci:get("qos_gargoyle", "download", "qos_monenabled") or "false"
 
 	local mon_data
 	if monenabled == "true" then

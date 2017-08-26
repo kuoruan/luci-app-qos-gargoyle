@@ -277,3 +277,6 @@ msgstr ""
 
 msgid "Use Non-standard Ping Target"
 msgstr ""
+
+msgid "Zero"
+msgstr ""

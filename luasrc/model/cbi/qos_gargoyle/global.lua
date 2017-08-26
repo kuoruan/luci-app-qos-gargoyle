@@ -55,10 +55,6 @@ o.write = function(...)
 	end
 end
 
-o = s:option(Value, "mtu", translate("MTU"))
-o.datatype = "range(68,9200)"
-o.placeholder = 1500
-
 s = m:section(NamedSection, "upload", "upload", translate("Upload Settings"))
 s.anonymous = true
 

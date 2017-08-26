@@ -51,7 +51,10 @@ end
 o = class_s:option(DummyValue, "min_bandwidth", translate("Minimum Bandwidth"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and string.format("%s kbit/s", v) or translate("None")
+	if v and tonumber(v) > 0 then
+		return string.format("%s kbit/s", v)
+	end
+	return translate("Zero")
 end
 
 o = class_s:option(DummyValue, "max_bandwidth", translate("Maximum Bandwidth"))

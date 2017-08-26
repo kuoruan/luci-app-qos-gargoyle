@@ -38,9 +38,9 @@ o = s:option(Value, "min_bandwidth", translate("Minimum Bandwidth"),
 	.. "number only slightly higher than this into this field. QoS will satisfiy the minimum service "
 	.. "of all classes first before allocating to other waiting classes so be careful to use minimum "
 	.. "bandwidths sparingly."))
-o:value("", translate("None"))
+o:value("0", translate("Zero"))
 o.datatype = "uinteger"
-o.rmempty  = true
+o.default = "0"
 
 o = s:option(Value, "max_bandwidth", translate("Maximum Bandwidth"),
 	translate("The maximum amount of bandwidth this class will be allocated in kbit/s. Even if unused "
@@ -48,7 +48,6 @@ o = s:option(Value, "max_bandwidth", translate("Maximum Bandwidth"),
 	.. "amount of bandwidth."))
 o:value("", translate("Unlimited"))
 o.datatype = "uinteger"
-o.rmempty  = true
 
 o = s:option(Flag, "minRTT", translate("Minimize RTT"),
 	translate("Indicates to the active congestion controller that you wish to minimize round trip "

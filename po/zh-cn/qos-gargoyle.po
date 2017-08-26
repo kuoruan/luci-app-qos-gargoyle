@@ -317,3 +317,6 @@ msgstr "上传设置"
 
 msgid "Use Non-standard Ping Target"
 msgstr "使用自定义 Ping 目标"
+
+msgid "Zero"
+msgstr "零"
