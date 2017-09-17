@@ -1,6 +1,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "\"Active Congestion Control\" not enabled"
+msgstr "“主动拥塞控制”未启用"
+
 msgid ""
 "<p>The active congestion control (ACC) observes your download activity and "
 "automatically adjusts your download link limit to maintain proper QoS "
@@ -24,6 +27,9 @@ msgstr ""
 
 msgid "All"
 msgstr "全部"
+
+msgid "Auto"
+msgstr "自动"
 
 msgid "Class Name"
 msgstr "类型名称"
@@ -108,11 +114,11 @@ msgstr ""
 "来WAN有效吞吐量的额外花销，所以当这些服务类型启用时你的 WAN 吞吐量将下降（通"
 "常在20%左右）"
 
+msgid "Load"
+msgstr "负载"
+
 msgid "Loading"
 msgstr "正在加载"
-
-msgid "MTU"
-msgstr ""
 
 msgid "Manual Ping Limit"
 msgstr "手动 Ping 限制"
@@ -134,6 +140,9 @@ msgstr "最小数据包长度"
 
 msgid "No"
 msgstr "否"
+
+msgid "No data found"
+msgstr "无数据"
 
 msgid "None"
 msgstr "无"
@@ -291,8 +300,8 @@ msgstr ""
 
 msgid ""
 "The total size of data transmitted since the establishment of the link (in "
-"Kbytes)."
-msgstr "自连接建立以来，传输的数据总量（单位：Kbytes）"
+"kBytes)."
+msgstr "自连接建立以来，传输的数据总量（单位：kBytes）"
 
 msgid "Total Download Bandwidth"
 msgstr "下载总带宽"

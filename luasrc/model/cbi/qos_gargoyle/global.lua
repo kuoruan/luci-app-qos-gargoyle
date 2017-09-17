@@ -3,6 +3,8 @@
 
 local sys = require "luci.sys"
 local uci = require "luci.model.uci".cursor()
+local net = require "luci.model.network".init()
+local qos = require "luci.model.qos_gargoyle"
 
 local m, s, o
 local upload_classes = {}
@@ -104,6 +106,7 @@ o = s:option(Value, "ptarget_ip", translate("Use Non-standard Ping Target"),
 	.. "link will occur in a different segment then you can enter an alternate ping target. Leave "
 	.. "empty to use the default settings."))
 o:depends("qos_monenabled", "true")
+o:value(qos.get_wan():gwaddr())
 o.datatype = "ipaddr"
 
 o = s:option(Value, "pinglimit", translate("Manual Ping Limit"),
@@ -115,6 +118,7 @@ o = s:option(Value, "pinglimit", translate("Manual Ping Limit"),
 	.. "target ping time of the active mode. The time you enter becomes the increase in the target "
 	.. "ping time between minRTT and active mode. Leave empty to use the default settings."))
 o:depends("qos_monenabled", "true")
-o.datatype = "range(10, 250)"
+o:value("Auto", translate("Auto"))
+o.datatype = "or('Auto', range(10, 250))"
 
 return m

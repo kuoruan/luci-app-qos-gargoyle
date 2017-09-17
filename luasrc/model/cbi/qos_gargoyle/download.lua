@@ -5,11 +5,11 @@ local wa   = require "luci.tools.webadmin"
 local uci  = require "luci.model.uci".cursor()
 local dsp  = require "luci.dispatcher"
 local http = require "luci.http"
-local ctl  = require "luci.controller.qos_gargoyle"
+local qos  = require "luci.model.qos_gargoyle"
 
 local m, class_s, rule_s, o
 local download_classes = {}
-local qos_gargoyle     = "qos_gargoyle"
+local qos_gargoyle = "qos_gargoyle"
 
 uci:foreach(qos_gargoyle, "download_class", function(s)
 	local class_alias = s.name
@@ -19,7 +19,7 @@ uci:foreach(qos_gargoyle, "download_class", function(s)
 end)
 
 m = Map(qos_gargoyle, translate("Download Settings"))
-m:append(Template("qos_gargoyle/rules_list"))
+m.template = "qos_gargoyle/list_view"
 
 class_s = m:section(TypedSection, "download_class", translate("Service Classes"),
 	translate("Each service class is specified by four parameters: percent bandwidth at capacity, "
@@ -45,22 +45,22 @@ end
 o = class_s:option(DummyValue, "percent_bandwidth", translate("Percent Bandwidth At Capacity"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and string.format("%s %%", v) or translate("Not set")
-end
-
-o = class_s:option(DummyValue, "min_bandwidth", translate("Minimum Bandwidth"))
-o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
 	if v and tonumber(v) > 0 then
-		return string.format("%s kbit/s", v)
+		return "%d %%" % v
 	end
-	return translate("Zero")
+	return translate("Not set")
 end
 
-o = class_s:option(DummyValue, "max_bandwidth", translate("Maximum Bandwidth"))
+o = class_s:option(DummyValue, "min_bandwidth", "%s (kbps)" % translate("Minimum Bandwidth"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and string.format("%s kbit/s", v) or translate("Unlimited")
+	return v and tonumber(v) or translate("Zero")
+end
+
+o = class_s:option(DummyValue, "max_bandwidth", "%s (kbps)" % translate("Maximum Bandwidth"))
+o.cfgvalue = function(...)
+	local v = Value.cfgvalue(...)
+	return v and tonumber(v) or translate("Unlimited")
 end
 
 o = class_s:option(DummyValue, "minRTT", translate("Minimize RTT"))
@@ -68,6 +68,10 @@ o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
 	return v and translate(v) or translate("No")
 end
+
+o = class_s:option(DummyValue, "_ld", "%s (kbps)" % translate("Load"))
+o.rawhtml = true
+o.value   = "<em class=\"ld-download\">*</em>"
 
 rule_s = m:section(TypedSection, "download_rule", translate("Classification Rules"),
 	translate("Packets are tested against the rules in the order specified -- rules toward the top "
@@ -127,22 +131,31 @@ o.datatype  = "or(port, portrange)"
 o = rule_s:option(DummyValue, "min_pkt_size", translate("Minimum Packet Length"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and wa.byte_format(tonumber(v)) or translate("Not set")
+	if v and tonumber(v) > 0 then
+		return wa.byte_format(v)
+	end
+	return translate("Not set")
 end
 
 o = rule_s:option(DummyValue, "max_pkt_size", translate("Maximum Packet Length"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and wa.byte_format(tonumber(v)) or translate("Not set")
+	if v and tonumber(v) > 0 then
+		return wa.byte_format(v)
+	end
+	return translate("Not set")
 end
 
 o = rule_s:option(DummyValue, "connbytes_kb", translate("Connection Bytes Reach"))
 o.cfgvalue = function(...)
 	local v = Value.cfgvalue(...)
-	return v and wa.byte_format(tonumber(v) * 1024) or translate("Not set")
+	if v and tonumber(v) > 0 then
+		return wa.byte_format(v * 1024)
+	end
+	return translate("Not set")
 end
 
-if ctl.has_ndpi() then
+if qos.has_ndpi() then
 	o = rule_s:option(DummyValue, "ndpi", translate("DPI Protocol"))
 	o.cfgvalue = function(...)
 		local v = Value.cfgvalue(...)

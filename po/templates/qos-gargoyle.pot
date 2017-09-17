@@ -1,6 +1,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+msgid "\"Active Congestion Control\" not enabled"
+msgstr ""
+
 msgid ""
 "<p>The active congestion control (ACC) observes your download activity and "
 "automatically adjusts your download link limit to maintain proper QoS "
@@ -17,6 +20,9 @@ msgid ""
 msgstr ""
 
 msgid "All"
+msgstr ""
+
+msgid "Auto"
 msgstr ""
 
 msgid "Class Name"
@@ -96,10 +102,10 @@ msgid ""
 "around 20%)."
 msgstr ""
 
-msgid "Loading"
+msgid "Load"
 msgstr ""
 
-msgid "MTU"
+msgid "Loading"
 msgstr ""
 
 msgid "Manual Ping Limit"
@@ -121,6 +127,9 @@ msgid "Minimum Packet Length"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No data found"
 msgstr ""
 
 msgid "None"
@@ -251,7 +260,7 @@ msgstr ""
 
 msgid ""
 "The total size of data transmitted since the establishment of the link (in "
-"Kbytes)."
+"kBytes)."
 msgstr ""
 
 msgid "Total Download Bandwidth"

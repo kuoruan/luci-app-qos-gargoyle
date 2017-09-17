@@ -1,9 +1,9 @@
 -- Copyright 2017 Xingwang Liao <kuoruan@gmail.com>
 -- Licensed to the public under the Apache License 2.0.
 
-local wa   = require "luci.tools.webadmin"
-local uci  = require "luci.model.uci".cursor()
-local ctl  = require "luci.controller.qos_gargoyle"
+local wa  = require "luci.tools.webadmin"
+local uci = require "luci.model.uci".cursor()
+local qos = require "luci.model.qos_gargoyle"
 
 local m, s, o
 local sid = arg[1]
@@ -52,7 +52,7 @@ o.datatype = "ipmask4"
 o = s:option(Value, "srcport", translate("Source Port(s)"),
 	translate("Packet's source port, can be a range (eg. 80-90)."))
 o:value("", translate("All"))
-o.datatype  = "or(port, portrange)"
+o.datatype = "or(port, portrange)"
 
 o = s:option(Value, "destination", translate("Destination IP(s)"),
 	translate("Packet's destination ip, can optionally have /[mask] after it (see -d option in "
@@ -64,7 +64,7 @@ o.datatype = "ipmask4"
 o = s:option(Value, "dstport", translate("Destination Port(s)"),
 	translate("Packet's destination port, can be a range (eg. 80-90)."))
 o:value("", translate("All"))
-o.datatype  = "or(port, portrange)"
+o.datatype = "or(port, portrange)"
 
 o = s:option(Value, "min_pkt_size", translate("Minimum Packet Length"),
 	translate("Packet's minimum size (in bytes)."))
@@ -75,13 +75,13 @@ o = s:option(Value, "max_pkt_size", translate("Maximum Packet Length"),
 o.datatype = "range(1, 1500)"
 
 o = s:option(Value, "connbytes_kb", translate("Connection Bytes Reach"),
-	translate("The total size of data transmitted since the establishment of the link (in Kbytes)."))
+	translate("The total size of data transmitted since the establishment of the link (in kBytes)."))
 o.datatype = "range(0, 4194303)"
 
-if ctl.has_ndpi() then
+if qos.has_ndpi() then
 	o = s:option(ListValue, "ndpi", translate("DPI Protocol"))
 	o:value("", translate("All"))
-	ctl.cbi_add_dpi_protocols(o)
+	qos.cbi_add_dpi_protocols(o)
 end
 
 return m

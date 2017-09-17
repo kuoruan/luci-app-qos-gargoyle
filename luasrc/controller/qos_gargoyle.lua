@@ -3,12 +3,8 @@
 
 module("luci.controller.qos_gargoyle", package.seeall)
 
-local uci  = require "luci.model.uci".cursor()
-local sys  = require "luci.sys"
 local util = require "luci.util"
 local http = require "luci.http"
-
-local dpi_protocols = {}
 
 function index()
 	if not nixio.fs.access("/etc/config/qos_gargoyle") then
@@ -44,55 +40,57 @@ function index()
 
 	entry({"admin", "network", "qos_gargoyle", "troubleshooting", "data"},
 		call("action_troubleshooting_data"))
-end
 
-function has_ndpi()
-	return sys.call("lsmod | cut -d ' ' -f1 | grep -q 'xt_ndpi'") == 0
-end
-
-local function init_dpi_protocols()
-	for line in util.execi("iptables -m ndpi --help 2>/dev/null | grep '^--'") do
-		local _, _, protocol, name = line:find("%-%-([^%s]+) Match for ([^%s]+)")
-
-		if protocol and name then
-			dpi_protocols[protocol] = name
-		end
-	end
-end
-
-function cbi_add_dpi_protocols(field)
-	if #dpi_protocols == 0 then init_dpi_protocols() end
-
-	for p, n in util.kspairs(dpi_protocols) do
-		field:value(p, n)
-	end
+	entry({"admin", "network", "qos_gargoyle", "load_data"},
+		call("action_load_data")).leaf = true
 end
 
 function action_troubleshooting_data()
+	local uci  = require "luci.model.uci".cursor()
+	local i18n = require "luci.i18n"
+
 	local data = {}
+
+	local monenabled = uci:get("qos_gargoyle", "download", "qos_monenabled") or "false"
 
 	local show_data = util.trim(util.exec("/etc/init.d/qos_gargoyle show 2>/dev/null"))
 	if show_data == "" then
-		show_data = "No data found"
+		show_data = i18n.translate("No data found")
 	end
 
 	data.show = show_data
-
-	local monenabled = uci:get("qos_gargoyle", "download", "qos_monenabled") or "false"
 
 	local mon_data
 	if monenabled == "true" then
 		mon_data = util.trim(util.exec("cat /tmp/qosmon.status 2>/dev/null"))
 
 		if mon_data == "" then
-			mon_data = "No data found"
+			mon_data = i18n.translate("No data found")
 		end
 	else
-		mon_data = "\"Active Congestion Control\" not enabled"
+		mon_data = i18n.translate("\"Active Congestion Control\" not enabled")
 	end
 
 	data.mon = mon_data
 
 	http.prepare_content("application/json")
 	http.write_json(data)
+end
+
+function action_load_data(type)
+	local device
+	if type == "download" then
+		device = "imq0"
+	elseif type == "upload" then
+		local qos = require "luci.model.qos_gargoyle"
+		device = qos.get_wan():ifname()
+	end
+
+	if device then
+		local data = util.exec("tc -s class show dev %s" % device)
+		http.prepare_content("text/plain")
+		http.write(data)
+	else
+		http.status(500, "Bad address")
+	end
 end

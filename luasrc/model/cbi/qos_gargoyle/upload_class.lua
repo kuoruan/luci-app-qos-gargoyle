@@ -40,7 +40,7 @@ o = s:option(Value, "min_bandwidth", translate("Minimum Bandwidth"),
 	.. "bandwidths sparingly."))
 o:value("0", translate("Zero"))
 o.datatype = "uinteger"
-o.default = "0"
+o.default  = "0"
 
 o = s:option(Value, "max_bandwidth", translate("Maximum Bandwidth"),
 	translate("The maximum amount of bandwidth this class will be allocated in kbit/s. Even if unused "
