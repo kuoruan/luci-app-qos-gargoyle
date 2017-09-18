@@ -44,8 +44,8 @@ end
 
 o = class_s:option(DummyValue, "percent_bandwidth", translate("Percent Bandwidth At Capacity"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	if v and tonumber(v) > 0 then
+	local v = tonumber(Value.cfgvalue(...))
+	if v and v > 0 then
 		return "%d %%" % v
 	end
 	return translate("Not set")
@@ -53,14 +53,14 @@ end
 
 o = class_s:option(DummyValue, "min_bandwidth", "%s (kbps)" % translate("Minimum Bandwidth"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	return v and tonumber(v) or translate("Zero")
+	local v = tonumber(Value.cfgvalue(...))
+	return v or translate("Zero")
 end
 
 o = class_s:option(DummyValue, "max_bandwidth", "%s (kbps)" % translate("Maximum Bandwidth"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	return v and tonumber(v) or translate("Unlimited")
+	local v = tonumber(Value.cfgvalue(...))
+	return v or translate("Unlimited")
 end
 
 o = class_s:option(DummyValue, "_ld", "%s (kbps)" % translate("Load"))
@@ -124,8 +124,8 @@ o.datatype = "or(port, portrange)"
 
 o = rule_s:option(DummyValue, "min_pkt_size", translate("Minimum Packet Length"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	if v and tonumber(v) > 0 then
+	local v = tonumber(Value.cfgvalue(...))
+	if v and v > 0 then
 		return wa.byte_format(v)
 	end
 	return translate("Not set")
@@ -133,8 +133,8 @@ end
 
 o = rule_s:option(DummyValue, "max_pkt_size", translate("Maximum Packet Length"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	if v and tonumber(v) > 0 then
+	local v = tonumber(Value.cfgvalue(...))
+	if v and v > 0 then
 		return wa.byte_format(v)
 	end
 	return translate("Not set")
@@ -142,8 +142,8 @@ end
 
 o = rule_s:option(DummyValue, "connbytes_kb", translate("Connection Bytes Reach"))
 o.cfgvalue = function(...)
-	local v = Value.cfgvalue(...)
-	if v and tonumber(v) > 0 then
+	local v = tonumber(Value.cfgvalue(...))
+	if v and v > 0 then
 		return wa.byte_format(v * 1024)
 	end
 	return translate("Not set")
