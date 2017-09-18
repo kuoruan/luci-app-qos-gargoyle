@@ -205,7 +205,7 @@ msgid ""
 "requirements. Entering a number which is too low will needlessly penalize "
 "your upload speed. You should use a speed test program (with QoS off) to "
 "determine available upload bandwidth. Note that bandwidth is specified in "
-"kbps. There are 8 kilobits per kilobyte."
+"kbps, leave blank to disable update QoS. There are 8 kilobits per kilobyte."
 msgstr ""
 
 msgid "Source IP(s)"
@@ -219,7 +219,8 @@ msgstr ""
 
 msgid ""
 "Specifying correctly is crucial to making QoS work. Note that bandwidth is "
-"specified in kbps. There are 8 kilobits per kilobyte."
+"specified in kbps, leave blank to disable download QoS. There are 8 kilobits "
+"per kilobyte."
 msgstr ""
 
 msgid ""

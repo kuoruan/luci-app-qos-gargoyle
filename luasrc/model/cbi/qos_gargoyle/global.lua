@@ -69,9 +69,8 @@ o = s:option(Value, "total_bandwidth", translate("Total Upload Bandwidth"),
 	.. "which is too high will result in QoS not meeting its class requirements. Entering a number "
 	.. "which is too low will needlessly penalize your upload speed. You should use a speed test "
 	.. "program (with QoS off) to determine available upload bandwidth. Note that bandwidth is "
-	.. "specified in kbps. There are 8 kilobits per kilobyte."))
+	.. "specified in kbps, leave blank to disable update QoS. There are 8 kilobits per kilobyte."))
 o.datatype = "uinteger"
-o.rmempty  = false
 
 s = m:section(NamedSection, "download", "download", translate("Download Settings"))
 s.anonymous = true
@@ -82,9 +81,8 @@ for _, s in ipairs(download_classes) do o:value(s.name, s.alias) end
 
 o = s:option(Value, "total_bandwidth", translate("Total Download Bandwidth"),
 	translate("Specifying correctly is crucial to making QoS work. Note that bandwidth is specified "
-	.. "in kbps. There are 8 kilobits per kilobyte."))
+	.. "in kbps, leave blank to disable download QoS. There are 8 kilobits per kilobyte."))
 o.datatype = "uinteger"
-o.rmempty  = false
 
 o = s:option(Flag, "qos_monenabled", translate("Enable Active Congestion Control"),
 	translate("<p>The active congestion control (ACC) observes your download activity and "
