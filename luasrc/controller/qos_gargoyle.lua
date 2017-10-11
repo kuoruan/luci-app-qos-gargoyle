@@ -83,13 +83,17 @@ function action_load_data(type)
 		device = "imq0"
 	elseif type == "upload" then
 		local qos = require "luci.model.qos_gargoyle"
-		device = qos.get_wan():ifname()
+		local wan = qos.get_wan()
+		device = wan and wan:ifname() or ""
 	end
 
 	if device then
-		local data = util.exec("tc -s class show dev %s" % device)
+		local data
+		if device ~= "" then
+			data = util.exec("tc -s class show dev %s 2>/dev/null" % device)
+		end
 		http.prepare_content("text/plain")
-		http.write(data)
+		http.write(data or "")
 	else
 		http.status(500, "Bad address")
 	end

@@ -104,7 +104,8 @@ o = s:option(Value, "ptarget_ip", translate("Use Non-standard Ping Target"),
 	.. "link will occur in a different segment then you can enter an alternate ping target. Leave "
 	.. "empty to use the default settings."))
 o:depends("qos_monenabled", "true")
-o:value(qos.get_wan():gwaddr())
+local wan = qos.get_wan()
+if wan then o:value(wan:gwaddr()) end
 o.datatype = "ipaddr"
 
 o = s:option(Value, "pinglimit", translate("Manual Ping Limit"),
