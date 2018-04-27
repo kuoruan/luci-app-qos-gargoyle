@@ -33,7 +33,7 @@ m = Map(qos_gargoyle, translate("Gargoyle QoS"),
 	translate("Quality of Service (QoS) provides a way to control how available bandwidth is "
 	.. "allocated."))
 
-s = m:section(NamedSection, "global", "global", translate("Global Settings"))
+s = m:section(SimpleSection, translate("Global Settings"))
 s.anonymous = true
 
 o = s:option(Button, "_switch", nil, translate("QoS Switch"))
